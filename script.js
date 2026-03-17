@@ -1,4 +1,4 @@
-import { tasks, addNewTask, deleteTask } from './tasks.js';
+import { tasks, addNewTask, deleteTask, toggleTaskStatus } from './tasks.js';
 
 renderTasks();
 function renderTasks()
@@ -7,11 +7,14 @@ function renderTasks()
     tasks.forEach((task) => {
         content += `
             <div class="task">
-                <input type="checkbox">
+                <input type="checkbox" class="js-task-checkbox" data-task-id=${task.id} ${task.completed ? 'checked' : ''}>
                 <span class="todo-task">${task.todo}</span>
                 <span class="todo-time">${task.time}</span>
                 <button class="delete-task-btn js-delete-task-btn" data-task-id=${task.id}>
                     Delete
+                </button>
+                <button class="edit-task-btn js-edit-task-btn">
+                    Edit
                 </button>
             </div>
         `;
@@ -21,6 +24,7 @@ function renderTasks()
 
     addNewTaskBtn();
     deleteTaskBtn();
+    toggleCompletionStatus();
 }
 
 function addNewTaskBtn()
@@ -73,4 +77,15 @@ function deleteTaskBtn()
             renderTasks();
         });
     });
+}
+
+function toggleCompletionStatus()
+{
+    const toggleTask = document.querySelectorAll('.js-task-checkbox');
+    toggleTask.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            const { taskId } = checkbox.dataset;
+            toggleTaskStatus(taskId);
+        })
+    })
 }

@@ -51,7 +51,7 @@ body {
 }
 
 /* buttons */
-.add-task-btn, .delete-task-btn {
+.add-task-btn, .delete-task-btn, .edit-task-btn {
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
@@ -66,6 +66,10 @@ body {
 
 .delete-task-btn {
     background-color: red;
+}
+
+.edit-task-btn {
+    background-color: gray;
 }
 
 .task {

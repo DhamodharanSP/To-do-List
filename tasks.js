@@ -21,3 +21,11 @@ export function deleteTask(taskId)
     tasks = tasks.filter(task => task.id !== taskId);
     saveLocal();
 }
+
+export function toggleTaskStatus(taskId)
+{
+    const task = tasks.find(task => task.id === taskId);
+    task.completed = !task.completed;
+    console.log(tasks);
+    saveLocal();
+}
