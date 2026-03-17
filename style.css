@@ -1,0 +1,98 @@
+body {
+    background-color: darkblue;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.todo-container {
+    border-radius: 10px;
+    background-color: rgb(0, 0, 180);
+    min-height: 40vh;
+    min-width: 60vw;
+    box-shadow: 0 0 5px white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 2rem;
+    color: white;
+}
+
+.tasks-container {
+    width: 94%;
+    height: 80%;
+    background-color: darkblue;
+    border-radius: 10px;
+    border: 2px solid rgb(57, 57, 255);
+    box-shadow: 0 0 5px black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* task */
+.add-task {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(240, 240, 240, 0.5);
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+.task-input, .task-time {
+    padding: 5px 10px;
+    border-radius: .5em;
+    border: none;
+    margin: 0 5px;
+}
+
+/* buttons */
+.add-task-btn, .delete-task-btn {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    box-shadow: 2px 2px 2px black;
+    cursor: pointer;
+}
+
+.add-task-btn {
+    background-color: green;
+}
+
+.delete-task-btn {
+    background-color: red;
+}
+
+.task {
+    background-color: rgba(0,0,250, 0.5);
+    width: 90%;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.7) inset;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    min-height: 2rem;
+    height: 3em;
+}
+
+.todo-task {
+    width: 50%;
+    height: 1rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: .5rem;
+    padding: 10px;
+}
+
+.todo-time {
+    width: 15%;
+    height: 1rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: .5rem;
+    padding: 10px;
+}
