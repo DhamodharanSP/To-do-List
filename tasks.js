@@ -11,9 +11,16 @@ export function addNewTask(todo, time)
         id: crypto.randomUUID(), // modern way of creating unique Ids
         todo, 
         time, 
-        completed: false
+        completed: false,
+        editing: false
     });
     saveLocal();
+}
+
+export function findTask(taskId)
+{
+    const task = tasks.find(task => task.id === taskId);
+    return task;
 }
 
 export function deleteTask(taskId)
@@ -24,8 +31,33 @@ export function deleteTask(taskId)
 
 export function toggleTaskStatus(taskId)
 {
-    const task = tasks.find(task => task.id === taskId);
+    const task = findTask(taskId);
+    if(!task) return;
     task.completed = !task.completed;
-    console.log(tasks);
+    saveLocal();
+}
+
+export function setEditing(taskId)
+{
+    removeEditing();
+    const task = findTask(taskId);
+    if(!task) return;
+    task.editing = true;
+    saveLocal();
+}
+
+export function removeEditing()
+{
+    tasks.forEach(task => {
+        task.editing = false;
+    });
+    saveLocal();
+}
+
+export function updateTask(taskId, newTodo)
+{
+    const task = findTask(taskId);
+    if(!task) return;
+    task.todo = newTodo;
     saveLocal();
 }
