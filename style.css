@@ -1,13 +1,16 @@
 body {
-    background-color: darkblue;
+    height: 100vh;
+    margin: 0;
+    /* background: conic-gradient(from 210deg, #c5bbb8 0.000deg, #c5bbb8 24.000deg, #b8b5b8 calc(24.000deg + 0.1deg), #b8b5b8 48.000deg, #a9afb7 calc(48.000deg + 0.1deg), #a9afb7 72.000deg, #9aa8b5 calc(72.000deg + 0.1deg), #9aa8b5 96.000deg, #8ba1b3 calc(96.000deg + 0.1deg), #8ba1b3 120.000deg, #7d98af calc(120.000deg + 0.1deg), #7d98af 144.000deg, #7090ab calc(144.000deg + 0.1deg), #7090ab 168.000deg, #6587a6 calc(168.000deg + 0.1deg), #6587a6 192.000deg, #5c7ea1 calc(192.000deg + 0.1deg), #5c7ea1 216.000deg, #55759b calc(216.000deg + 0.1deg), #55759b 240.000deg, #516c94 calc(240.000deg + 0.1deg), #516c94 264.000deg, #4f638d calc(264.000deg + 0.1deg), #4f638d 288.000deg, #505a85 calc(288.000deg + 0.1deg), #505a85 312.000deg, #54537d calc(312.000deg + 0.1deg), #54537d 336.000deg, #5b4b74 calc(336.000deg + 0.1deg) 360.000deg) no-repeat center / contain; */
+    background: linear-gradient(45deg, #8ec5fc 0.000%, #8dd3ff 25.000%, #a1d8ff 50.000%, #c1d2ff 75.000%, #e0c3ff 100.000%);
     display: flex;
-    flex-direction: row;
+    align-items: flex-start;
     justify-content: center;
 }
 
 .todo-container {
     border-radius: 10px;
-    background-color: rgb(0, 0, 180);
+    background: linear-gradient(225deg, #ff6f70 0.000%, #ffa091 20.000%, #ffc7b1 40.000%, #ffe4d0 60.000%, #fff6ee 80.000%, #fffcff 100.000%);
     min-height: 40vh;
     min-width: 60vw;
     box-shadow: 0 0 5px white;
@@ -24,13 +27,13 @@ body {
 .tasks-container {
     width: 94%;
     height: 80%;
-    background-color: darkblue;
+    background: conic-gradient(from 210deg, #c5bbb8 0.000deg, #c5bbb8 24.000deg, #b8b5b8 calc(24.000deg + 0.1deg), #b8b5b8 48.000deg, #a9afb7 calc(48.000deg + 0.1deg), #a9afb7 72.000deg, #9aa8b5 calc(72.000deg + 0.1deg), #9aa8b5 96.000deg, #8ba1b3 calc(96.000deg + 0.1deg), #8ba1b3 120.000deg, #7d98af calc(120.000deg + 0.1deg), #7d98af 144.000deg, #7090ab calc(144.000deg + 0.1deg), #7090ab 168.000deg, #6587a6 calc(168.000deg + 0.1deg), #6587a6 192.000deg, #5c7ea1 calc(192.000deg + 0.1deg), #5c7ea1 216.000deg, #55759b calc(216.000deg + 0.1deg), #55759b 240.000deg, #516c94 calc(240.000deg + 0.1deg), #516c94 264.000deg, #4f638d calc(264.000deg + 0.1deg), #4f638d 288.000deg, #505a85 calc(288.000deg + 0.1deg), #505a85 312.000deg, #54537d calc(312.000deg + 0.1deg), #54537d 336.000deg, #5b4b74 calc(336.000deg + 0.1deg) 360.000deg) no-repeat center / contain;
     border-radius: 10px;
-    border: 2px solid rgb(57, 57, 255);
-    box-shadow: 0 0 5px black;
+    box-shadow: 2px 2px 5px black;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 10px;
 }
 
 /* task */
@@ -40,7 +43,6 @@ body {
     background-color: rgba(240, 240, 240, 0.5);
     padding: 10px;
     border-radius: 10px;
-
 }
 
 .task-input, .task-time {
@@ -51,7 +53,7 @@ body {
 }
 
 /* buttons */
-.add-task-btn, .delete-task-btn, .edit-task-btn {
+.add-task-btn, .delete-task-btn, .edit-task-btn, .save-task-btn, .cancel-edit-btn {
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
@@ -60,11 +62,11 @@ body {
     cursor: pointer;
 }
 
-.add-task-btn {
+.add-task-btn, .save-task-btn {
     background-color: green;
 }
 
-.delete-task-btn {
+.delete-task-btn, .cancel-edit-btn {
     background-color: red;
 }
 
@@ -73,30 +75,54 @@ body {
 }
 
 .task {
-    background-color: rgba(0,0,250, 0.5);
-    width: 90%;
+    background: transparent;
     border-radius: 10px;
     box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.7) inset;
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-around;
+    align-items: center;
     min-height: 2rem;
-    height: 3em;
+    margin: 5px 10px;
+    padding: 10px;
+}
+
+.completed {
+    text-decoration: line-through;
+    opacity: .5;
+}
+
+.task:hover {
+    transform: translateY(-2px);
 }
 
 .todo-task {
     width: 50%;
-    height: 1rem;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: .5rem;
-    padding: 10px;
+    padding: 5px 10px;
 }
 
 .todo-time {
     width: 15%;
-    height: 1rem;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: .5rem;
-    padding: 10px;
+    padding: 5px 10px;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+/* Editing content */
+.task-edit {
+    padding: .4rem .5rem;
+    border-radius: .5rem;
+    border: none;
+    width: 50%;
+}
+
+.task.editing {
+    background-color: rgba(255,255,255,0.2);
+    box-shadow: 0 0 8px rgba(255,255,255,0.6);
 }
