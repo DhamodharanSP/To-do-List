@@ -25,6 +25,8 @@ export function findTask(taskId)
 
 export function deleteTask(taskId)
 {
+    const task = findTask(taskId);
+    if(!task || task.completed) return;
     tasks = tasks.filter(task => task.id !== taskId);
     saveLocal();
 }
@@ -41,7 +43,7 @@ export function setEditing(taskId)
 {
     removeEditing();
     const task = findTask(taskId);
-    if(!task) return;
+    if(!task || task.completed) return;
     task.editing = true;
     saveLocal();
 }
