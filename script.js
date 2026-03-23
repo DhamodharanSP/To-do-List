@@ -13,9 +13,9 @@ function renderTasks()
         const dateString = formatDate(task.time);
         content += (isEditing) ? `
             <div class="task">
-                <input type="text" class="task-edit js-task-edit-${task.id}" value="${task.todo.replace(/"/g, '&quot;')}">
+                <input type="text" class="task-edit js-task-edit" value="${task.todo.replace(/"/g, '&quot;')}">
                 <div class="todo-time">${dateString}</div>
-                <button class="save-task-btn js-save-task-btn" data-task-id=${task.id}>
+                <button class="save-task-btn js-save-task-btn" data-task-id="${task.id}" onmousedown="event.preventDefault()">
                     Save
                 </button>
                 <button class="cancel-edit-btn js-cancel-edit-btn" data-task-id=${task.id}>
@@ -39,131 +39,125 @@ function renderTasks()
     const taskContainer = document.querySelector('.tasks-container');
     taskContainer.innerHTML = content;
 
-    addNewTaskBtn();
-    deleteTaskBtn();
-    toggleCompletionStatus();
-    editTaskBtn();
-    saveTaskBtn();
-    cancelEditBtn();
-    focusEdit();
+    focusInput('.js-task-edit');
 }
 
-// Add a new task
+// Event delegation
+const todoContainer = document.querySelector('.js-todo-container');
+
+// on click
+todoContainer.addEventListener('click', (event) => {
+    const targetElement = event.target;
+    
+    const addNewTaskButton = targetElement.closest('.js-add-new-task-btn');
+    const addTaskButton = targetElement.closest('.js-add-task');
+    const deleteTaskButton = targetElement.closest('.js-delete-task-btn');
+    const editTaskButton = targetElement.closest('.js-edit-task-btn');
+    const saveTaskButton = targetElement.closest('.js-save-task-btn');
+    const cancelEditButton = targetElement.closest('.js-cancel-edit-btn');
+
+    if(addNewTaskButton) {
+        addNewTaskBtn();
+    }
+    else if(addTaskButton) {
+        addTaskBtn();
+        renderTasks();
+    }
+    else if(deleteTaskButton) {
+        deleteTaskBtn(deleteTaskButton);
+        renderTasks();
+    }
+    else if(editTaskButton) {
+        editTaskBtn(editTaskButton);
+        renderTasks();
+    }
+    else if(saveTaskButton) {
+        saveTaskBtn(saveTaskButton);
+        renderTasks();
+    }
+    else if(cancelEditButton) {
+        cancelEditBtn();
+        renderTasks();
+    }
+});
+
 function addNewTaskBtn()
 {
-    const addNewTaskButton = document.querySelector('.js-add-new-task-btn');
     const addNewArea = document.querySelector('.js-add-new');
-    addNewTaskButton.addEventListener('click', () => {
-        addNewArea.innerHTML = `
-            <div class="add-task">
-                <input type="text" placeholder="add new task" class="task-input js-task-input">
-                <input type="datetime-local" class="task-time js-task-time">
-                <button class="add-task-btn js-add-task">
-                    Add Task
-                </button>
-            </div>
-        `;
-        addTaskBtn();
-    });
+    addNewArea.innerHTML = `
+        <div class="add-task">
+            <input type="text" placeholder="add new task" class="task-input js-task-input">
+            <input type="datetime-local" class="task-time js-task-time">
+            <button class="add-task-btn js-add-task">
+                Add Task
+            </button>
+        </div>
+    `;
+    focusInput('.js-task-input');
 }
 
-// Adding a task to backend
 function addTaskBtn()
 {
-    const addTaskButton = document.querySelector('.js-add-task');
-    addTaskButton.addEventListener('click', () => {
-        const taskInput = document.querySelector('.js-task-input');
-        const taskTime = document.querySelector('.js-task-time');
-        
-        const todoValue = taskInput.value, todoTime = taskTime.value;
-        if(!todoValue || !todoTime) return;
-        addNewTask(todoValue, todoTime);
-        taskInput.value = '';
-        taskTime.value = '';
-        const addNewArea = document.querySelector('.js-add-new');
-        addNewArea.innerHTML = `
-            <button class="add-task-btn js-add-new-task-btn">
-                Add New +
-            </button>
-        `;
-        renderTasks();
-    });
+    const taskInput = document.querySelector('.js-task-input');
+    const taskTime = document.querySelector('.js-task-time');
+    const todoValue = taskInput.value, todoTime = taskTime.value;
+    if(!todoValue || !todoTime) return;
+    addNewTask(todoValue, todoTime);
+    taskInput.value = '';
+    taskTime.value = '';
+    const addNewArea = document.querySelector('.js-add-new');
+    addNewArea.innerHTML = `
+        <button class="add-task-btn js-add-new-task-btn">
+            Add New +
+        </button>
+    `;
 }
 
-// Deleting a task
-function deleteTaskBtn()
+function deleteTaskBtn(deleteTaskButton)
 {
-    const deleteTaskButtons = document.querySelectorAll('.js-delete-task-btn');
-    deleteTaskButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            const { taskId, isCompleted } = button.dataset;
-            const taskCompleted = JSON.parse(isCompleted);
-            if(!taskCompleted)
-                deleteTask(taskId);
-            renderTasks();
-        });
-    });
+    const { taskId } = deleteTaskButton.dataset;
+    deleteTask(taskId);
 }
 
-// Toggle task completion 
-function toggleCompletionStatus()
+function editTaskBtn(editTaskButton)
 {
-    const toggleTask = document.querySelectorAll('.js-task-checkbox');
-    toggleTask.forEach((checkbox) => {
-        checkbox.addEventListener('change', () => {
-            const { taskId } = checkbox.dataset;
-            toggleTaskStatus(taskId);
-            renderTasks();
-        });
-    });
+    const { taskId } = editTaskButton.dataset;
+    setEditing(taskId);
 }
 
-// Enable editing on task
-function editTaskBtn()
+function saveTaskBtn(saveTaskButton)
 {
-    const editTaskButtons = document.querySelectorAll('.js-edit-task-btn');
-    editTaskButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            const { taskId, isCompleted } = button.dataset;
-            const taskCompleted = JSON.parse(isCompleted);
-            if(!taskCompleted)
-                setEditing(taskId);
-            renderTasks();
-        });
-    });
+    const { taskId } = saveTaskButton.dataset;
+    const task = saveTaskButton.closest('.task');
+    const editTaskInput = task.querySelector(`.js-task-edit`);
+    const newTodo = editTaskInput.value;
+    updateTask(taskId, newTodo);
+    removeEditing();
 }
 
-// Save and Update the task
-function saveTaskBtn()
-{
-    const saveTaskButtons = document.querySelectorAll('.js-save-task-btn');
-    saveTaskButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            const { taskId } = button.dataset;
-            const editTaskInput = document.querySelector(`.js-task-edit-${taskId}`);
-            const newTodo = editTaskInput.value;
-            updateTask(taskId, newTodo);
-            removeEditing();
-            renderTasks();
-        });
-    });
-}
-
-// Cancel editing
 function cancelEditBtn()
 {
-    const cancelEditButtons = document.querySelectorAll('.js-cancel-edit-btn');
-    cancelEditButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            removeEditing();
-            renderTasks();
-        })
-    })
+    removeEditing();
 }
 
-// Focus on edit input
-function focusEdit()
+// on change
+todoContainer.addEventListener('change', (event) => {
+    const targetElement = event.target;
+    const toggleTask = targetElement.closest('.js-task-checkbox');
+    if(toggleTask) toggleCompletionStatus(toggleTask);
+    renderTasks();
+})
+
+function toggleCompletionStatus(toggleTask)
 {
-    const editInput = document.querySelector('.task-edit');
-    if(editInput) editInput.focus();
+    const { taskId } = toggleTask.dataset;
+    toggleTaskStatus(taskId);
+}
+
+
+// Focus on input
+function focusInput(selector)
+{
+    const input = document.querySelector(selector);
+    if(input) input.focus();
 }
