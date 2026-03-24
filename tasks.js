@@ -1,4 +1,4 @@
-export let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 function saveLocal()
 {
@@ -65,4 +65,13 @@ export function updateTask(taskId, newTodo)
     if(!task) return;
     task.todo = newTodo;
     saveLocal();
+}
+
+export function getFilteredTasks(filterMode)
+{
+    return tasks.filter(task => {
+        const isCompleted = task.completed;
+        const isValidTask = (filterMode === 'all') || (filterMode === 'completed' && isCompleted) || (filterMode === 'active' && !isCompleted);
+        return isValidTask;
+    });
 }

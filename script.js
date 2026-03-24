@@ -1,4 +1,4 @@
-import { tasks, addNewTask, deleteTask, toggleTaskStatus, editTaskId, setEditing, removeEditing, updateTask } from './tasks.js';
+import { addNewTask, deleteTask, toggleTaskStatus, editTaskId, setEditing, removeEditing, updateTask, getFilteredTasks } from './tasks.js';
 import { formatDate } from './day.js';
 import { filterMode, openFilterDropdown, closeFilterDropdown, setFilterMode} from './utils/filter.js';
 
@@ -10,37 +10,36 @@ renderTasks();
 // rendering Task manager
 function renderTasks()
 {
+    const tasksToRender = getFilteredTasks(filterMode);
     let content = '';
-    tasks.forEach((task) => {
+    tasksToRender.forEach((task) => {
         const isCompleted = task.completed;
         const isEditing = (task.id === editTaskId);
         const dateString = formatDate(task.time);
-        const isValidTask = (filterMode === 'all') || (filterMode === 'completed' && isCompleted) || (filterMode === 'active' && !isCompleted);
-        if(isValidTask) 
-            content += (isEditing) ? `
-                <div class="task">
-                    <input type="text" class="task-edit js-task-edit" value="${task.todo.replace(/"/g, '&quot;')}">
-                    <div class="todo-time">${dateString}</div>
-                    <button class="save-task-btn js-save-task-btn" data-task-id="${task.id}" onmousedown="event.preventDefault()">
-                        Save
-                    </button>
-                    <button class="cancel-edit-btn js-cancel-edit-btn" data-task-id=${task.id}>
-                        Cancel
-                    </button>
-                </div>
-            ` : `
-                <div class="task  ${isCompleted ? 'completed' : ''}">
-                    <input type="checkbox" class="js-task-checkbox" data-task-id=${task.id} ${isCompleted ? 'checked' : ''}>
-                    <div class="todo-task js-todo-task">${task.todo}</div>
-                    <div class="todo-time">${dateString}</div>
-                    <button class="delete-task-btn js-delete-task-btn" data-task-id=${task.id} data-is-completed="${isCompleted}">
-                        Delete
-                    </button>
-                    <button class="edit-task-btn js-edit-task-btn" data-task-id=${task.id} data-is-completed="${isCompleted}">
-                        Edit
-                    </button>
-                </div>
-            `;
+        content += (isEditing) ? `
+            <div class="task">
+                <input type="text" class="task-edit js-task-edit" value="${task.todo.replace(/"/g, '&quot;')}">
+                <div class="todo-time">${dateString}</div>
+                <button class="save-task-btn js-save-task-btn" data-task-id="${task.id}" onmousedown="event.preventDefault()">
+                    Save
+                </button>
+                <button class="cancel-edit-btn js-cancel-edit-btn" data-task-id=${task.id}>
+                    Cancel
+                </button>
+            </div>
+        ` : `
+            <div class="task  ${isCompleted ? 'completed' : ''}">
+                <input type="checkbox" class="js-task-checkbox" data-task-id=${task.id} ${isCompleted ? 'checked' : ''}>
+                <div class="todo-task js-todo-task">${task.todo}</div>
+                <div class="todo-time">${dateString}</div>
+                <button class="delete-task-btn js-delete-task-btn" data-task-id=${task.id} data-is-completed="${isCompleted}">
+                    Delete
+                </button>
+                <button class="edit-task-btn js-edit-task-btn" data-task-id=${task.id} data-is-completed="${isCompleted}">
+                    Edit
+                </button>
+            </div>
+        `;
     });
 
     taskContainer.innerHTML = content;
