@@ -1,5 +1,9 @@
 import { tasks, addNewTask, deleteTask, toggleTaskStatus, setEditing, removeEditing, updateTask } from './tasks.js';
 import { formatDate } from './day.js';
+import { filterMode, openFilterDropdown, closeFilterDropdown, setFilterMode} from './utils/filter.js';
+
+// caching task container
+const taskContainer = document.querySelector('.tasks-container');
 
 renderTasks();
 
@@ -11,32 +15,34 @@ function renderTasks()
         const isCompleted = task.completed;
         const isEditing = task.editing;
         const dateString = formatDate(task.time);
-        content += (isEditing) ? `
-            <div class="task">
-                <input type="text" class="task-edit js-task-edit" value="${task.todo.replace(/"/g, '&quot;')}">
-                <div class="todo-time">${dateString}</div>
-                <button class="save-task-btn js-save-task-btn" data-task-id="${task.id}" onmousedown="event.preventDefault()">
-                    Save
-                </button>
-                <button class="cancel-edit-btn js-cancel-edit-btn" data-task-id=${task.id}>
-                    Cancel
-                </button>
-            </div>
-        ` : `
-            <div class="task  ${isCompleted ? 'completed' : ''}">
-                <input type="checkbox" class="js-task-checkbox" data-task-id=${task.id} ${isCompleted ? 'checked' : ''}>
-                <div class="todo-task js-todo-task">${task.todo}</div>
-                <div class="todo-time">${dateString}</div>
-                <button class="delete-task-btn js-delete-task-btn" data-task-id=${task.id} data-is-completed="${isCompleted}">
-                    Delete
-                </button>
-                <button class="edit-task-btn js-edit-task-btn" data-task-id=${task.id} data-is-completed="${isCompleted}">
-                    Edit
-                </button>
-            </div>
-        `;
+        const isValidTask = (filterMode === 'all') || (filterMode === 'completed' && isCompleted) || (filterMode === 'active' && !isCompleted);
+        if(isValidTask) 
+            content += (isEditing) ? `
+                <div class="task">
+                    <input type="text" class="task-edit js-task-edit" value="${task.todo.replace(/"/g, '&quot;')}">
+                    <div class="todo-time">${dateString}</div>
+                    <button class="save-task-btn js-save-task-btn" data-task-id="${task.id}" onmousedown="event.preventDefault()">
+                        Save
+                    </button>
+                    <button class="cancel-edit-btn js-cancel-edit-btn" data-task-id=${task.id}>
+                        Cancel
+                    </button>
+                </div>
+            ` : `
+                <div class="task  ${isCompleted ? 'completed' : ''}">
+                    <input type="checkbox" class="js-task-checkbox" data-task-id=${task.id} ${isCompleted ? 'checked' : ''}>
+                    <div class="todo-task js-todo-task">${task.todo}</div>
+                    <div class="todo-time">${dateString}</div>
+                    <button class="delete-task-btn js-delete-task-btn" data-task-id=${task.id} data-is-completed="${isCompleted}">
+                        Delete
+                    </button>
+                    <button class="edit-task-btn js-edit-task-btn" data-task-id=${task.id} data-is-completed="${isCompleted}">
+                        Edit
+                    </button>
+                </div>
+            `;
     });
-    const taskContainer = document.querySelector('.tasks-container');
+
     taskContainer.innerHTML = content;
 
     focusInput('.js-task-edit');
@@ -50,14 +56,24 @@ todoContainer.addEventListener('click', (event) => {
     const targetElement = event.target;
     
     const addNewTaskButton = targetElement.closest('.js-add-new-task-btn');
+    const cancelAddNewTaskButton = targetElement.closest('.js-cancel-add-btn');
     const addTaskButton = targetElement.closest('.js-add-task');
     const deleteTaskButton = targetElement.closest('.js-delete-task-btn');
     const editTaskButton = targetElement.closest('.js-edit-task-btn');
     const saveTaskButton = targetElement.closest('.js-save-task-btn');
     const cancelEditButton = targetElement.closest('.js-cancel-edit-btn');
 
+    const filterButton = targetElement.closest('.js-filter-btn');
+
+    const filterAll = targetElement.closest('.filter-all');
+    const filterActive = targetElement.closest('.filter-active');
+    const filterCompleted = targetElement.closest('.filter-completed');
+
     if(addNewTaskButton) {
         addNewTaskBtn();
+    }
+    else if(cancelAddNewTaskButton) {
+        toggleAddTask();
     }
     else if(addTaskButton) {
         addTaskBtn();
@@ -79,6 +95,24 @@ todoContainer.addEventListener('click', (event) => {
         cancelEditBtn();
         renderTasks();
     }
+    else if(filterAll) {
+        setFilterMode('all');
+        renderTasks();
+        closeFilterDropdown();
+    }
+    else if(filterActive) {
+        setFilterMode('active');
+        renderTasks();
+        closeFilterDropdown();
+    }
+    else if(filterCompleted) {
+        setFilterMode('completed');
+        renderTasks();
+        closeFilterDropdown();
+    }
+    else if(filterButton) {
+        openFilterDropdown();
+    }
 });
 
 function addNewTaskBtn()
@@ -90,6 +124,9 @@ function addNewTaskBtn()
             <input type="datetime-local" class="task-time js-task-time">
             <button class="add-task-btn js-add-task">
                 Add Task
+            </button>
+            <button class="cancel-add-btn js-cancel-add-btn">
+                Cancel
             </button>
         </div>
     `;
@@ -105,6 +142,11 @@ function addTaskBtn()
     addNewTask(todoValue, todoTime);
     taskInput.value = '';
     taskTime.value = '';
+    toggleAddTask();
+}
+
+function toggleAddTask()
+{
     const addNewArea = document.querySelector('.js-add-new');
     addNewArea.innerHTML = `
         <button class="add-task-btn js-add-new-task-btn">

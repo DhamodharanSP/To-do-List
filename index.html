@@ -7,14 +7,24 @@
 <body>
     <main class="todo-container js-todo-container">
         <div class="title">Task Manager</div>
-        <div class="tasks-container">
-            
+        <div class="feature">
+            <div class="js-add-new">
+                <button class="add-task-btn js-add-new-task-btn">
+                    Add New +
+                </button>
+            </div>
+            <div class="filter">
+                <button class="filter-btn js-filter-btn">
+                    Filter
+                </button>
+                <div class="filter-option disabled">
+                    <div class="options filter-all">All</div>
+                    <div class="options filter-active">Active</div>
+                    <div class="options filter-completed">Completed</div>
+                </div>
+            </div>
         </div>
-        <div class="js-add-new">
-            <button class="add-task-btn js-add-new-task-btn">
-                Add New +
-            </button>
-        </div>
+        <div class="tasks-container"></div>
     </main>
     <script type="module" src="script.js"></script>
 </body>
