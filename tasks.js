@@ -11,8 +11,7 @@ export function addNewTask(todo, time)
         id: crypto.randomUUID(), // modern way of creating unique Ids
         todo, 
         time, 
-        completed: false,
-        editing: false
+        completed: false
     });
     saveLocal();
 }
@@ -39,21 +38,25 @@ export function toggleTaskStatus(taskId)
     saveLocal();
 }
 
+export let editTaskId = localStorage.getItem('editTask') || '';
+
+function saveEditTaskId()
+{
+    localStorage.setItem('editTask', editTaskId);
+}
+
 export function setEditing(taskId)
 {
-    removeEditing();
     const task = findTask(taskId);
     if(!task || task.completed) return;
-    task.editing = true;
-    saveLocal();
+    editTaskId = taskId;
+    saveEditTaskId();
 }
 
 export function removeEditing()
 {
-    tasks.forEach(task => {
-        task.editing = false;
-    });
-    saveLocal();
+    editTaskId = '';
+    saveEditTaskId();
 }
 
 export function updateTask(taskId, newTodo)

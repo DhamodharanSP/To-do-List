@@ -1,4 +1,4 @@
-import { tasks, addNewTask, deleteTask, toggleTaskStatus, setEditing, removeEditing, updateTask } from './tasks.js';
+import { tasks, addNewTask, deleteTask, toggleTaskStatus, editTaskId, setEditing, removeEditing, updateTask } from './tasks.js';
 import { formatDate } from './day.js';
 import { filterMode, openFilterDropdown, closeFilterDropdown, setFilterMode} from './utils/filter.js';
 
@@ -13,7 +13,7 @@ function renderTasks()
     let content = '';
     tasks.forEach((task) => {
         const isCompleted = task.completed;
-        const isEditing = task.editing;
+        const isEditing = (task.id === editTaskId);
         const dateString = formatDate(task.time);
         const isValidTask = (filterMode === 'all') || (filterMode === 'completed' && isCompleted) || (filterMode === 'active' && !isCompleted);
         if(isValidTask) 
@@ -70,6 +70,8 @@ todoContainer.addEventListener('click', (event) => {
     const filterCompleted = targetElement.closest('.filter-completed');
 
     if(addNewTaskButton) {
+        removeEditing();
+        renderTasks();
         addNewTaskBtn();
     }
     else if(cancelAddNewTaskButton) {
@@ -111,7 +113,9 @@ todoContainer.addEventListener('click', (event) => {
         closeFilterDropdown();
     }
     else if(filterButton) {
+        removeEditing();
         openFilterDropdown();
+        renderTasks();
     }
 });
 
