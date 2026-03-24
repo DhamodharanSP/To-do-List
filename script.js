@@ -1,5 +1,5 @@
 import { addNewTask, deleteTask, toggleTaskStatus, editTaskId, setEditing, removeEditing, updateTask, getFilteredTasks } from './tasks.js';
-import { formatDate } from './day.js';
+import { formatDate, sortTaskOnTime } from './utils/day.js';
 import { filterMode, openFilterDropdown, closeFilterDropdown, setFilterMode} from './utils/filter.js';
 
 // caching task container
@@ -11,6 +11,7 @@ renderTasks();
 function renderTasks()
 {
     const tasksToRender = getFilteredTasks(filterMode);
+    sortTaskOnTime(tasksToRender);
     let content = '';
     tasksToRender.forEach((task) => {
         const isCompleted = task.completed;

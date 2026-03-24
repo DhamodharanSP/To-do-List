@@ -4,3 +4,8 @@ export function formatDate(day)
 {
     return dayjs(day).format('MMMM D, hh:mm');
 }
+
+export function sortTaskOnTime(tasksToRender)
+{
+    tasksToRender.sort((a,b) => dayjs(a.time).valueOf() - dayjs(b.time).valueOf());
+}
