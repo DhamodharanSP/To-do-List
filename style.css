@@ -1,6 +1,10 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
 body {
     height: 100vh;
-    margin: 0;
     background: linear-gradient(45deg, #8ec5fc 0.000%, #8dd3ff 25.000%, #a1d8ff 50.000%, #c1d2ff 75.000%, #e0c3ff 100.000%);
     display: flex;
     align-items: center;
@@ -11,11 +15,12 @@ body {
     border-radius: 10px;
     background: linear-gradient(225deg, #ff6f70 0.000%, #ffa091 20.000%, #ffc7b1 40.000%, #ffe4d0 60.000%, #fff6ee 80.000%, #fffcff 100.000%);
     min-height: 40vh;
-    min-width: 60vw;
+    min-width: 70vw;
     box-shadow: 0 0 5px white;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 1rem 0;
 }
 
 .title {
@@ -52,7 +57,7 @@ body {
 }
 
 /* buttons */
-.add-task-btn, .delete-task-btn, .edit-task-btn, .save-task-btn, .cancel-edit-btn {
+.add-task-btn, .delete-task-btn, .edit-task-btn, .save-task-btn, .cancel-edit-btn, .cancel-add-btn {
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
@@ -65,7 +70,7 @@ body {
     background-color: green;
 }
 
-.delete-task-btn, .cancel-edit-btn {
+.delete-task-btn, .cancel-edit-btn, .cancel-add-btn {
     background-color: red;
 }
 
@@ -124,4 +129,60 @@ button:hover {
 .task.editing {
     background-color: rgba(255,255,255,0.2);
     box-shadow: 0 0 8px rgba(255,255,255,0.6);
+}
+
+/* Feature Area */
+.feature {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.filter {
+    position: relative;
+}
+
+.filter-btn {
+    padding: .5rem 1rem;
+    background-color: #7f24c6;
+    border-radius: .5rem;
+    border: none;
+    color: white;
+    box-shadow: 2px 2px 2px rgb(10,10,10);
+}
+
+.filter-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+.filter-option {
+    position: absolute;
+    background: #353535;
+    min-width: 120px;
+    z-index: 2;
+    border-radius: .5rem;
+    border: 2px solid rgb(80,80,80);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.options {
+    color: white;
+    padding: .5rem;
+    border-radius: inherit;
+}
+
+.options:hover {
+    background-color: #222;
+    cursor: pointer;
+}
+
+/* toggle visibility */
+.disabled {
+    display: none;
 }
