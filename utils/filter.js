@@ -5,9 +5,12 @@ function saveLocal()
     localStorage.setItem('filterMode', filterMode);
 }
 
+const filterModeDisplay = document.querySelector('.js-filter-mode');
+
 export function setFilterMode(mode)
 {
     filterMode = mode;
+    filterModeDisplay.textContent = filterMode;
     saveLocal();
 }
 
@@ -22,3 +25,6 @@ export function closeFilterDropdown()
 {    
     filterOption.classList.add('disabled');
 }
+
+// initializing filter mode
+setFilterMode(filterMode);

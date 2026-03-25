@@ -143,12 +143,17 @@ button:hover {
 
 .filter {
     position: relative;
+    display: flex;
+    background-color: rgb(144, 53, 197);
+    padding: 4px;
+    border: 2px solid gray;
+    border-radius: 1rem;
 }
 
 .filter-btn {
     padding: .5rem 1rem;
     background-color: #7f24c6;
-    border-radius: .5rem;
+    border-radius: .7rem;
     border: none;
     color: white;
     box-shadow: 2px 2px 2px rgb(10,10,10);
@@ -169,6 +174,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    top: 2rem;
 }
 
 .options {
@@ -180,6 +186,17 @@ button:hover {
 .options:hover {
     background-color: #222;
     cursor: pointer;
+}
+
+.filter-mode {
+    padding: .5rem 1rem;
+    border: 2px solid #7f24c6;
+    border-radius: 1rem;
+    font-weight: bolder;
+    color: #7f24c6;
+    background-color: white;
+    margin: 0 1rem;
+    box-shadow: 0 0 5px rgba(0,0,0,0.7) inset;
 }
 
 /* toggle visibility */
