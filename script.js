@@ -12,7 +12,7 @@ function renderTasks()
 {
     const tasksToRender = getFilteredTasks(filterMode);
     sortTaskOnTime(tasksToRender);
-    
+
     let content = '';
     tasksToRender.forEach((task) => {
         const isEditing = (task.id === editTaskId);
