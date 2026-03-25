@@ -75,3 +75,8 @@ export function getFilteredTasks(filterMode)
         return isValidTask;
     });
 }
+
+export function isEmpty(tasksToRender)
+{
+    return tasksToRender.length === 0;
+}

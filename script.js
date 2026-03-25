@@ -1,6 +1,7 @@
-import { addNewTask, deleteTask, toggleTaskStatus, editTaskId, setEditing, removeEditing, updateTask, getFilteredTasks } from './tasks.js';
+import { addNewTask, deleteTask, toggleTaskStatus, editTaskId, setEditing, removeEditing, updateTask, getFilteredTasks, isEmpty } from './tasks.js';
 import { formatDate, sortTaskOnTime } from './utils/day.js';
 import { filterMode, openFilterDropdown, closeFilterDropdown, setFilterMode} from './utils/filter.js';
+import { empty_animation } from './utils/empty_animation.js';
 
 // caching task container
 const taskContainer = document.querySelector('.tasks-container');
@@ -11,13 +12,17 @@ renderTasks();
 function renderTasks()
 {
     const tasksToRender = getFilteredTasks(filterMode);
+
     sortTaskOnTime(tasksToRender);
 
     let content = '';
-    tasksToRender.forEach((task) => {
-        const isEditing = (task.id === editTaskId);
-        content += (isEditing) ? renderEditTask(task) : renderTaskItem(task);
-    });
+
+    if(!isEmpty(tasksToRender))
+        tasksToRender.forEach((task) => {
+            const isEditing = (task.id === editTaskId);
+            content += (isEditing) ? renderEditTask(task) : renderTaskItem(task);
+        });
+    else content = empty_animation(filterMode);
 
     taskContainer.innerHTML = content;
 

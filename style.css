@@ -203,3 +203,52 @@ button:hover {
 .disabled {
     display: none;
 }
+
+/* Animation */
+.place {
+    width: 100%;
+    background-color: rgba(0,0,0, 0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 1em;
+}
+
+.bush {
+    height: 100px;
+    width: 100px;
+    animation-name: rotateBush;
+    animation-timing-function: linear; 
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    position: relative;
+}
+
+@keyframes rotateBush {
+    from {
+        left: 0;
+        transform: rotate(0deg)
+    }
+    to {
+        left: calc(100% - 100px);
+        transform: rotate(calc(360deg * 2)) ;
+    }
+}
+
+.empty-filter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-filter {
+    font-size: large;
+    color: white;
+    background: #353535;
+    text-align: center;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    border: 2px solid gray;
+}
